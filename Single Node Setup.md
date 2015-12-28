@@ -38,11 +38,7 @@
    OpenJDK Runtime Environment (rhel-2.6.2.3.el7-x86_64 u91-b00)
    OpenJDK 64-Bit Server VM (build 24.91-b01, mixed mode)
    ~~~
-	 
+      	 
 * 安装软件
-   * 
-   * yum -y install
-   * rsync（用于多节点）
-
-2. 
-
+   * `yum -y install ssh`
+   * `yum -y install rsync`
