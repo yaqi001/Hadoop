@@ -42,3 +42,28 @@
 * 安装软件
    * `yum -y install ssh`
    * `yum -y install rsync`
+
+<h2 id="starting">准备开启 Hadoop 集群</h2>
+下载并解压 Hadoop 发行版，编辑 `$HADOOP_HOME/etc/hadoop/hadoop-env.sh` 文件，添加如下参数：
+~~~ bash
+# 我安装的 Java 在 /usr/lib/jvm/ 目录下
+export JAVA_HOME=/usr/lib/jvm/java-1.7.0
+~~~
+
+然后执行下面的指令：
+~~~ bash
+$ bin/hadoop
+~~~
+
+通过执行上面的指令，你可以查看 Hadoop 脚本的使用文档。
+
+现在有三种开启 Hadoop 集群的方式：
+* 本地（即单一）模式
+* 伪分布式模式
+* 全分布式模式
+
+<h2 id="standalone">单机操作</h2>
+默认情况下，Hadoop 是作为一个单一的 Java 进程，并在非分布式模式下运行的，调试起来很有用。
+
+下面这个例子的大概意思是这样的：拷贝所有以 .xml 为后缀的文件作为输入，然后将所有文件名和已知正则表达式相匹配的文件输出到给出的输出目录下。
+
