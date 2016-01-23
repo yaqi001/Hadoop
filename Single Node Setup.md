@@ -78,7 +78,7 @@ $ bin/hadoop
 Hadoop 还可以在单机上以伪分布式模式运行起来，每个 Hadoop 后台分别运行在 Java 进程中。
 
 * 配置
-  * 在 `etc/hadoop/core-site.xml` 文件中写入如下内容：
+  * 在 `${HADOOP_HOME}/etc/hadoop/core-site.xml` 文件中写入如下内容：
      ~~~ bash
      <configuration>
          <property>
@@ -89,7 +89,7 @@ Hadoop 还可以在单机上以伪分布式模式运行起来，每个 Hadoop �
      ~~~
      > **注意：**：value 标签中只能写 localhost，不要写改机器的 ip，主机名等等。
 
-  * 在 `etc/hadoop/hdfs-site.xml` 文件中写入如下内容：
+  * 在 `${HADOOP_HOME}/etc/hadoop/hdfs-site.xml` 文件中写入如下内容：
      ~~~ bash
      <configuration>
          <property>
@@ -173,4 +173,47 @@ Hadoop 还可以在单机上以伪分布式模式运行起来，每个 Hadoop �
      [helen@yingyun hadoop-2.7.1]$ sbin/stop-dfs.sh
      ~~~
    
-     
+<h2 id="yarn">单结点上的 YARN</h2>     
+你还可以在 YARN 上以伪分布式模式运行 MapReduce 任务，但前提是你需要设置一些参数并运行 ResourceManager 后台程序和 NodeManager 后台程序。
+确保你已经完成了上面教程的 1~4 的部分，然后就可以开始了：
+
+1. 在 `${HADOOP_HOME}/etc/hadoop/mapred-site.xml` 中添加如下内容：
+   ~~~ bash
+   <configuration>
+		<property>
+			<name>mapreduce.framework.name</name>
+			<value>yarn</value>
+		</property>
+	</configuration>
+    ~~~
+
+2. 在 `${HADOOP_HOME}/etc/hadoop/yarn-site.xml` 中添加如下内容：
+   ~~~ bash
+   <configuration>
+		<property>
+			<name>yarn.nodemanager.aux-services</name>
+			<value>mapreduce_shuffle</value>
+		</property>
+	</configuration>
+    ~~~
+
+3. 开启 `ResourceManager` 后台程序和 `NodeManager` 后台程序：
+   ~~~ bash
+   [helen@yingyun hadoop-2.7.1]$ sbin/start-yarn.sh
+   ~~~
+
+4. 浏览 `ResourceManager`：
+   默认情况下，请访问：`http://localhost:8088/` 
+
+5. 运行一个 `MapReduce` 任务。
+   ~~~ bash
+   [helen@yingyun hadoop-2.7.1]$ bin/yarn jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar pi 16 1000
+   ~~~
+
+   然后你可以在 `http://192.168.9.56:8088/cluster/scheduler` 中看到：
+   ![yarn](./images/yarn.png)
+
+6. 关闭后台程序：
+   ~~~ bash
+   [helen@yingyun hadoop-2.7.1]$ sbin/stop-yarn.sh
+   ~~~
